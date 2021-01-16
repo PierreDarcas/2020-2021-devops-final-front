@@ -13,6 +13,7 @@ jobs:
             - dependencies-
       - run: yarn global add node-gyp && yarn install
       - run: yarn run build
+      - run: yarn serve
       - run: yarn run test
       - save_cache:
           paths:
