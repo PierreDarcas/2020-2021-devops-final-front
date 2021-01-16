@@ -15,7 +15,7 @@ jobs:
       - run: yarn global add serve
       - run: yarn run build
       - run: yarn run test
-      - run: yarn run serve
+      # - run: yarn run serve
       - save_cache:
           paths:
             - node_modules
