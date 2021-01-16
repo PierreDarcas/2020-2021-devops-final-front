@@ -12,6 +12,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - dependencies-
       - run: yarn global add node-gyp && yarn install
+      - run: yarn run build
       - save_cache:
           paths:
             - node_modules
