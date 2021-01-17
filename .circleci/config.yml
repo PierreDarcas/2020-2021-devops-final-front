@@ -53,9 +53,11 @@ jobs:
       - image: circleci/node:dubnium-browsers
     working_directory: ~/repo
     steps:
+      - attach_workspace:
+          at: /tmp
       - run:
           name: Deploy app
-          command: sudo npm install netlify-cli -g && netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFLY_DEVOPSFINAL_TOKEN --prod 
+          command: sudo npm install netlify-cli -g && netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFLY_DEVOPSFINAL_TOKEN --prod -dir=/tmp/server
 
 workflows:
   version: 2
