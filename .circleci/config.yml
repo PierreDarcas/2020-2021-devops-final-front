@@ -62,7 +62,7 @@ workflows:
       - build
       - artifact-save:
           requires:
-            -build
+            - build
       - netlifly-deploy:
           requires:
             - build
