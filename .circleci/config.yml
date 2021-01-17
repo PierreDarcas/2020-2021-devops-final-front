@@ -63,7 +63,7 @@ jobs:
           at: /tmp
       - run:
           name: Deploy app
-          command: sudo npm netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFLY_DEVOPSFINAL_TOKEN --prod -dir=/tmp/server
+          command: sudo npm install netlify-cli -g && netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFLY_DEVOPSFINAL_TOKEN --prod -dir=/tmp/server
       - save_cache:
           paths:
             - node_modules
