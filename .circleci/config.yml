@@ -20,6 +20,7 @@ jobs:
           paths:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+
   artifact-save:
     docker:
       - image: circleci/node:dubnium-browsers
@@ -31,10 +32,7 @@ jobs:
             - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
             - dependencies-
-      - run:
-         name: Copy deployment artifacts to workspace
-         command: |
-           cp ./dist /tmp/server -r
+      - run: cp ./dist /tmp/server -r
       - store_artifacts:
          path: /tmp/server
       - persist_to_workspace:
