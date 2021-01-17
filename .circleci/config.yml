@@ -20,21 +20,51 @@ jobs:
           paths:
             - node_modules
           key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+  artifact-save:
+    docker:
+      - image: circleci/node:dubnium-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+            # fallback to using the latest cache if no exact match is found
+            - dependencies-
+      - run:
+         name: Copy deployment artifacts to workspace
+         command: |
+           cp ./dist /tmp/server -r
+      - store_artifacts:
+         path: /tmp/server
+      - persist_to_workspace:
+         root: /tmp
+         paths:
+           - server
+      - save_cache:
+        paths:
+          - node_modules
+        key: v1-dependencies-{{ checksum "package.json" }}
+    
   netlifly-deploy:
-      docker:
-        - image: circleci/node:dubnium-browsers
-      working_directory: ~/repo
-      steps:
-        - run:
-            name: Deploy app
-            command: sudo npm install netlify-cli -g && netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFLY_DEVOPSFINAL_TOKEN --prod 
+    docker:
+      - image: circleci/node:dubnium-browsers
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Deploy app
+          command: sudo npm install netlify-cli -g && netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFLY_DEVOPSFINAL_TOKEN --prod 
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - build
+      - artifact-save:
+          requires:
+            -build
       - netlifly-deploy:
           requires:
             - build
+            - artifact-save
       
