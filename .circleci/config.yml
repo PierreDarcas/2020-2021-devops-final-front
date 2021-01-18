@@ -8,9 +8,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+            - dependencies2-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
-            - dependencies-
+            - dependencies2-
       - run: yarn global add node-gyp && yarn install
       - run: yarn global add serve
       - run: yarn run build
@@ -19,7 +19,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+          key: dependencies2-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
           
   artifact-save:
     docker:
@@ -29,9 +29,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+            - dependencies2-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
-            - dependencies-
+            - dependencies2-
       - run: yarn build
       - run:
          name: Copy deployment artifacts to workspace
@@ -46,7 +46,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies2-{{ checksum "package.json" }}
     
   netlifly-deploy:
     docker:
@@ -56,9 +56,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - dependencies-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
+            - dependencies2-{{ checksum "package.json" }}-{{ .Environment.CACHE_VERSION }}
             # fallback to using the latest cache if no exact match is found
-            - dependencies-
+            - dependencies2-
       - attach_workspace:
           at: /tmp
       - run:
@@ -67,7 +67,7 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v1-dependencies2-{{ checksum "package.json" }}
 
   docker_build_push:
     working_directory: /dockerapp
